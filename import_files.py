@@ -25,3 +25,5 @@ def import_sequences(seq_1_path, seq_2_path):
     return seq_1, seq_2
 
 
+def create_output(NW_table, path):
+    pass
