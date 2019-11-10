@@ -1,18 +1,49 @@
 import numpy as np
 
 
-def fill_table(gap, same, diff, seq_1, seq_2):
+class NeedlemanWunsch:
 
-    nw_matrix = np.zeros((len(seq_1)+2, len(seq_2)+2), dtype=object)
 
-    for letter_1, letter_2, i, j in zip(seq_1, seq_2, range(2, len(seq_1) + 2), range(2, len(seq_2) + 2)):
-        nw_matrix[0, i] = letter_1
-        nw_matrix[j, 0] = letter_2
+    def __init__(self, config, seq_1, seq_2):
 
-    for i in range(nw_matrix.shape[0]):
-        for j in range(nw_matrix.shape[1]):
-            if i > 1 and j > 1:
-                nw_matrix[1, j] = nw_matrix[1, j - 1] + gap
-                nw_matrix[j, 1] = nw_matrix[j - 1, 1] + gap
+        self.GAP = int(config['GAP'])
+        self.SAME = int(config['SAME'])
+        self.DIFF = int(config['DIFF'])
+        self.seq_1 = seq_1
+        self.seq_2 = seq_2
+        self.matrix = np.zeros((len(seq_1)+2, len(seq_2)+2), dtype=object)
+
+        self.fill_table()
+
+        self.score = self.matrix[-1, -1]
+
+
+    def fill_table(self):
+
+        for i in range(self.matrix.shape[0]):
+            for j in range(self.matrix.shape[1]):
+
+                if i < len(self.seq_2) and j < len(self.seq_1):
+                    self.matrix[0, i + 2] = self.seq_2[i]
+                    self.matrix[j + 2, 0] = self.seq_1[j]
+
+                if i > 1 and j > 1:
+                    self.matrix[1, j] = self.matrix[1, j - 1] + self.GAP
+                    self.matrix[i, 1] = self.matrix[i - 1, 1] + self.GAP
+
+                    self.matrix[i, j] = max((self.matrix[i - 1, j - 1] + self.compare(self.matrix[0, j], self.matrix[i, 0])),
+                                            (self.matrix[i - 1, j] + self.GAP),
+                                            (self.matrix[i, j - 1] + self.GAP))
+
+
+
+    def compare(self, val_1, val_2):
+        if val_1 == val_2:
+            return self.SAME
+        else:
+            return self.DIFF
+
+
+
 
 
