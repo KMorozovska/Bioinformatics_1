@@ -10,15 +10,15 @@ def test_import_config(filename):
     result = import_config(filename)
     # then
     if len(result) == 5:
-        print("Successfully imported file")
+        print("Successfully imported file\n")
     else:
-        print("Error reading config file")
+        print("Error reading config file\n")
 
 
 
 def test_create_NW_table():
     # given
-    config = {'GAP': -2, 'SAME': 5, 'DIFF': -5}
+    config = {'gap': -2, 'same': 5, 'diff': -5, 'max_number_paths': 10}
     seq_1 = "SAM"
     seq_2 = "SUMO"
 
@@ -34,16 +34,16 @@ def test_create_NW_table():
     # then
     try:
         np.testing.assert_array_equal(NW_matrix, NW_object.matrix)
-        print("Successfully created NW matrix ")
+        print("Successfully created NW matrix\n")
     except AssertionError as err:
         print(err)
-        print("Error creating NW matrix")
+        print("Error creating NW matrix\n")
 
 
 
 def test_adding_arrows():
     # given
-    config = {'GAP': -2, 'SAME': 5, 'DIFF': -5}
+    config = {'gap': -2, 'same': 5, 'diff': -5, 'max_number_paths': 10}
     seq_1 = "SAM"
     seq_2 = "SUMO"
 
@@ -70,16 +70,16 @@ def test_adding_arrows():
     # then
     try:
         np.testing.assert_array_equal(NW_arrows, NW_table.arrows)
-        print("Successfully created NW arrows ")
+        print("Successfully created NW arrows\n")
     except AssertionError as err:
         print(err)
-        print("Error creating NW arrows")
+        print("Error creating NW arrows\n")
 
 
 
 def test_create_graph():
     # given
-    config = {'GAP': -2, 'SAME': 5, 'DIFF': -5}
+    config = {'gap': -2, 'same': 5, 'diff': -5, 'max_number_paths': 10}
     seq_1 = "SAM"
     seq_2 = "SUMO"
 
@@ -106,10 +106,10 @@ def test_create_graph():
     # then
     try:
         np.testing.assert_array_equal(NW_edges, list(NW_table.G.edges))
-        print("Successfully created NW directed graph ")
+        print("Successfully created NW directed graph\n")
     except AssertionError as err:
         print(err)
-        print("Error creating NW directed graph")
+        print("Error creating NW directed graph\n")
 
 
 
