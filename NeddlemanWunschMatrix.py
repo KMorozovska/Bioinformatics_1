@@ -7,9 +7,10 @@ class NeedlemanWunschMatrix:
 
     def __init__(self, config, seq_1, seq_2):
 
-        self.GAP = int(config['GAP'])
-        self.SAME = int(config['SAME'])
-        self.DIFF = int(config['DIFF'])
+        self.GAP = int(config['gap'])
+        self.SAME = int(config['same'])
+        self.DIFF = int(config['diff'])
+        self.max_number_paths = int(config['max_number_paths'])
         self.seq_1 = seq_1
         self.seq_2 = seq_2
         self.matrix = np.zeros((len(seq_1) + 2, len(seq_2) + 2), dtype=object)
@@ -68,9 +69,20 @@ class NeedlemanWunschMatrix:
             self.arrows.append(Arrow((i, j), (i - 1, j - 1), self.matrix[i - 1, j - 1]))
             self.G.add_edge((i, j), (i - 1, j - 1), weight=self.matrix[i - 1, j - 1])
         if up == selected:
+
+            if i == 2 and j == 2:
+                self.arrows.append(Arrow((1, 2), (1, 1), self.matrix[1, 2]))
+                self.G.add_edge((1, 2), (1, 1), weight=self.matrix[1, 2])
+
             self.arrows.append(Arrow((i, j), (i, j - 1), self.matrix[i, j - 1]))
             self.G.add_edge((i, j), (i, j - 1), weight=self.matrix[i, j - 1])
+
         if left == selected:
+
+            if i == 2 and j == 2:
+                self.arrows.append(Arrow((2, 1), (1, 1), self.matrix[2, 1]))
+                self.G.add_edge((2, 1), (1, 1), weight=self.matrix[2, 1])
+
             self.arrows.append(Arrow((i, j), (i - 1, j), self.matrix[i - 1, j]))
             self.G.add_edge((i, j), (i - 1, j), weight=self.matrix[i - 1, j])
 
@@ -96,8 +108,10 @@ class NeedlemanWunschMatrix:
             scores_dict[k] = score
             k += 1
 
+
+
         max_value = max(scores_dict.values())
-        best_paths_ids = [k for k, v in scores_dict.items() if v == max_value]
+        best_paths_ids = [k for k, v in scores_dict.items() if v == max_value][0:self.max_number_paths]
 
         i = 0
         for path in nx.all_simple_paths(self.G, source=(self.matrix.shape[0]-1, self.matrix.shape[1]-1), target=(1, 1)):

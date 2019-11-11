@@ -1,7 +1,10 @@
-SCORE = 4
+SCORE = -15
 
-SA-M-
-S-UMO
+-ALAAJ-S---
+-T-O-M-E-KS
 
-S-AM-
-SU-MO
+-ALAAJ-S---
+-T-O-M-E-KS
+
+-ALAA-JS---
+-T-O-M-EK-S
