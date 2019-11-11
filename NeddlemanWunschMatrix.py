@@ -108,8 +108,6 @@ class NeedlemanWunschMatrix:
             scores_dict[k] = score
             k += 1
 
-
-
         max_value = max(scores_dict.values())
         best_paths_ids = [k for k, v in scores_dict.items() if v == max_value][0:self.max_number_paths]
 
@@ -155,7 +153,6 @@ class NeedlemanWunschMatrix:
             final_words.append(word_1)
             final_words.append(word_2)
             final_words.append(['\n'])
-
 
         for row in final_words:
             row = ''.join(row)

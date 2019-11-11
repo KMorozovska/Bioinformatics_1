@@ -1,5 +1,18 @@
 import sys
 
+
+def validate_config(str_, dict_):
+    if str_ not in dict_:
+        print("Missing argument in config_content: " + str_)
+        sys.exit()
+
+
+def validate_seq(str_, condition, id):
+    if len(str_) > condition:
+        print("Sequence too long! seq_" + id)
+        sys.exit()
+
+
 def import_config(filepath):
     config_content = {}
 
@@ -18,23 +31,22 @@ def import_config(filepath):
     return config_content
 
 
-def validate_config(str_, dict_):
-    if str_ not in dict_:
-        print("Missing argument in config_content: " + str_)
-        sys.exit()
-
-
-def validate_seq(str_, condition, id):
-    if len(str_) > condition:
-        print("Sequence too long! seq_" + id)
-        sys.exit()
-
-
 def import_sequences(seq_1_path, seq_2_path, cond):
+
     with open(seq_1_path, "r") as text_file:
+
+        for line in text_file:
+            if ">" in line:
+                break
+
         seq_1 = text_file.read()
 
     with open(seq_2_path, "r") as text_file:
+
+        for line in text_file:
+            if ">" in line:
+                break
+
         seq_2 = text_file.read()
 
     validate_seq(seq_1, cond, "1")

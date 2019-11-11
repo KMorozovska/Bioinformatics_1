@@ -4,7 +4,7 @@ from NeddlemanWunschMatrix import *
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-a', dest='seq1_path', help='seq_1.txt path')
+parser.add_argument('-a', dest='seq_1_path', help='seq_1.txt path')
 parser.add_argument('-b', dest='seq_2_path', help='seq_2.txt path')
 parser.add_argument('-c', dest='config_path', help='config.txt path')
 parser.add_argument('-o', dest='output_path', help='output.txt path')
