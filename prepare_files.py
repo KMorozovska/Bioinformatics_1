@@ -26,4 +26,10 @@ def import_sequences(seq_1_path, seq_2_path):
 
 
 def create_output(NW_table, path):
-    pass
+    print("Writing results to file..")
+
+    with open(path, "w") as text_file:
+        text_file.write("SCORE = " + str(NW_table.final_score))
+        text_file.write("\n\n")
+        text_file.write(NW_table.output)
+

@@ -16,6 +16,7 @@ class NeedlemanWunschMatrix:
         self.arrows = []
         self.G = nx.DiGraph()
         self.best_paths = []
+        self.output = []
 
         self.fill_matrix()
 
@@ -27,6 +28,8 @@ class NeedlemanWunschMatrix:
 
     def fill_matrix(self):
         """ Function preparing NeedlemanWunsch matrix, from filling the letters to finding the score. """
+
+        print("Creating Needleman-Wunsch matrix..")
 
         for i in range(self.matrix.shape[0]):
             for j in range(self.matrix.shape[1]):
@@ -49,11 +52,13 @@ class NeedlemanWunschMatrix:
 
                     self.matrix[i, j] = selected
 
+
     def compare(self, val_1, val_2):
         if val_1 == val_2:
             return self.SAME
         else:
             return self.DIFF
+
 
     def add_arrow(self, i, j, diag, up, left, selected):
         """ Arrow list is created as a list of Arrow objects,
@@ -71,6 +76,8 @@ class NeedlemanWunschMatrix:
 
 
     def find_best_paths(self):
+
+        print("Finding best paths in graph...")
 
         all_paths = nx.all_simple_paths(self.G, source=(self.matrix.shape[0]-1, self.matrix.shape[1]-1), target=(1, 1))
 
@@ -103,4 +110,41 @@ class NeedlemanWunschMatrix:
 
     def prepare_output(self):
 
-        print(self.best_paths)
+        print("Preparing final results..")
+
+        final_words = []
+
+        for path in self.best_paths:
+
+            k = 0
+            j = 0
+            word_1 = []
+            word_2 = []
+
+            for i in range(len(path) - 1, -1, -1):
+
+                if path[i][0] > 1 and path[i][1] > 1:
+
+                    if k < len(self.seq_1):
+                        word_1.append(self.seq_1[k])
+                        k += 1
+                    if j < len(self.seq_2):
+                        word_2.append(self.seq_2[j])
+                        j += 1
+
+                if path[i - 1][0] == path[i][0]:
+                    word_1.append('-')
+
+                if path[i - 1][1] == path[i][1]:
+                    word_2.append('-')
+
+            final_words.append(word_1)
+            final_words.append(word_2)
+            final_words.append(['\n'])
+
+
+        for row in final_words:
+            row = ''.join(row)
+            self.output.append(row)
+
+        self.output = '\n'.join(self.output).replace("\n\n", "\n")

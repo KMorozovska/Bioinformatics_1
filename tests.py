@@ -1,4 +1,4 @@
-from import_files import *
+from prepare_files import *
 from NeddlemanWunschMatrix import *
 import sys
 
@@ -117,7 +117,7 @@ def test_create_graph():
 def main():
 
     if len(sys.argv) < 2:
-        print("Please add argument with path to config_file.txt")
+        print("Please add argument with path to config.txt")
     else:
         config_path = sys.argv[1]
 

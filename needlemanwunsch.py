@@ -1,5 +1,5 @@
 import sys
-from import_files import *
+from prepare_files import *
 from NeddlemanWunschMatrix import *
 
 seq_1_path = sys.argv[1]
@@ -12,8 +12,8 @@ seq_1, seq_2 = import_sequences(seq_1_path, seq_2_path)
 
 NW_table = NeedlemanWunschMatrix(config, seq_1, seq_2)
 
-
-
 create_output(NW_table, output_path)
+
+print("Done")
 
 

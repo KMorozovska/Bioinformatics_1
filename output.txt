@@ -1,0 +1,7 @@
+SCORE = 4
+
+SA-M-
+S-UMO
+
+S-AM-
+SU-MO
