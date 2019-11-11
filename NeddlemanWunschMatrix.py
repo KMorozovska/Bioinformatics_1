@@ -15,13 +15,15 @@ class NeedlemanWunschMatrix:
         self.matrix = np.zeros((len(seq_1) + 2, len(seq_2) + 2), dtype=object)
         self.arrows = []
         self.G = nx.DiGraph()
-        self.paths = []
+        self.best_paths = []
 
         self.fill_matrix()
 
-        self.score = self.matrix[-1, -1]
+        self.final_score = self.matrix[-1, -1]
 
-        self.find_paths()
+        self.find_best_paths()
+        self.prepare_output()
+
 
     def fill_matrix(self):
         """ Function preparing NeedlemanWunsch matrix, from filling the letters to finding the score. """
@@ -68,14 +70,37 @@ class NeedlemanWunschMatrix:
             self.G.add_edge((i, j), (i - 1, j), weight=self.matrix[i - 1, j])
 
 
-    def find_paths(self):
+    def find_best_paths(self):
 
-        #for path in nx.all_simple_paths(NW_table.G, source=(4, 5), target=(1, 1)):
-        #    print(path)
+        all_paths = nx.all_simple_paths(self.G, source=(self.matrix.shape[0]-1, self.matrix.shape[1]-1), target=(1, 1))
 
-        self.paths = nx.all_simple_paths(self.G, source=(self.matrix.shape[0]-1, self.matrix.shape[1]-1), target=(1, 1))
+        scores_dict = {}
+        k = 0
+        for path in all_paths:
+
+            score = 0
+
+            for i in range(len(path) - 1):
+                arr_list = [obj for obj in self.arrows if obj.source == path[i] and obj.dest == path[i + 1]]
+                if len(arr_list) > 0:
+                    next_arrow = arr_list[0]
+                    score += next_arrow.value
+
+            scores_dict[k] = score
+            k += 1
+
+        max_value = max(scores_dict.values())
+        best_paths_ids = [k for k, v in scores_dict.items() if v == max_value]
+
+        i = 0
+        for path in nx.all_simple_paths(self.G, source=(self.matrix.shape[0]-1, self.matrix.shape[1]-1), target=(1, 1)):
+
+            if i in best_paths_ids:
+                self.best_paths.append(path)
+            i += 1
 
 
-        pass
 
+    def prepare_output(self):
 
+        print(self.best_paths)
