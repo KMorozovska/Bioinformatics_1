@@ -1,22 +1,22 @@
-import sys
+import argparse
 from prepare_files import *
 from NeddlemanWunschMatrix import *
 
-if len(sys.argv) < 5:
-    print("Please add necessary path arguments (seq_1.txt, seq_2.txt, config.txt, output.txt")
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-a', dest='seq1_path', help='seq_1.txt path')
+parser.add_argument('-b', dest='seq_2_path', help='seq_2.txt path')
+parser.add_argument('-c', dest='config_path', help='config.txt path')
+parser.add_argument('-o', dest='output_path', help='output.txt path')
 
-seq_1_path = sys.argv[1]
-seq_2_path = sys.argv[2]
-config_path = sys.argv[3]
-output_path = sys.argv[4]
+args = parser.parse_args()
 
-config = import_config(config_path)
-seq_1, seq_2 = import_sequences(seq_1_path, seq_2_path, int(config['max_seq_length']))
+config = import_config(args.config_path)
+seq_1, seq_2 = import_sequences(args.seq_1_path, args.seq_2_path, int(config['max_seq_length']))
 
 NW_table = NeedlemanWunschMatrix(config, seq_1, seq_2)
 
-create_output(NW_table, output_path)
+create_output(NW_table, args.output_path)
 
 print("Done")
 

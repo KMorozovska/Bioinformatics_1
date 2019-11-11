@@ -1,10 +1,7 @@
-SCORE = -15
+SCORE = 6
 
--ALAAJ-S---
--T-O-M-E-KS
+SU-M
+S-AM
 
--ALAAJ-S---
--T-O-M-E-KS
-
--ALAA-JS---
--T-O-M-EK-S
+S-UM
+SA-M
