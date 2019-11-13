@@ -9,7 +9,7 @@ def test_import_config(filename):
     # when
     result = import_config(filename)
     # then
-    if len(result) == 5:
+    if len(result) == 5 and {"gap", "same", "diff", "max_seq_length", "max_number_paths"} <= set(result):
         print("Successfully imported file\n")
     else:
         print("Error reading config file\n")

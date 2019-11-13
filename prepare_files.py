@@ -1,9 +1,39 @@
 import sys
 
 
-def validate_config(str_, dict_):
+def validate_config_content(str_, dict_):
     if str_ not in dict_:
         print("Missing argument in config_content: " + str_)
+        sys.exit()
+
+
+def is_int(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
+def validate_config_lines(str_, k):
+
+
+    if (":" in str_ and len(str_.split(":")) < 2) or ("=" in str_ and len(str_.split("=")) < 2):
+        print("Cannot process key and value in config file, line: " + str(k))
+        sys.exit()
+
+    if ":" not in str_ and "=" not in str_ and len(str_.split()) < 2:
+        print("Cannot process key and value in config file, line: " + str(k))
+        sys.exit()
+
+    if not any(is_int(x) for x in str_.split()) and \
+            not any(is_int(x) for x in str_.split(":")) and \
+            not any(is_int(x) for x in str_.split("=")):
+        print("Line " + str_ + " is missing numerical (integer) value")
+        sys.exit()
+
+    if not any(isinstance(x, (str)) for x in str_.split()):
+        print("Line " + str_ + " is missing key")
         sys.exit()
 
 
@@ -15,18 +45,37 @@ def validate_seq(str_, condition, id):
 
 def import_config(filepath):
     config_content = {}
+    k = 1
 
     with open(filepath) as fp:
         line = fp.readline().lower()
-        while line:
-            config_content[line.split("=", 1)[0].strip()] = line.split("=", 1)[1].strip()
-            line = fp.readline().lower()
+        validate_config_lines(line, k)
 
-    validate_config('same', config_content)
-    validate_config('diff', config_content)
-    validate_config('gap', config_content)
-    validate_config('max_seq_length', config_content)
-    validate_config('max_number_paths', config_content)
+        while line:
+            k += 1
+
+            if "=" in line:
+                config_content[line.split("=", 1)[0].strip()] = line.split("=", 1)[1].strip()
+                line = fp.readline().lower()
+
+            elif ":" in line:
+                config_content[line.split(":", 1)[0].strip()] = line.split(":", 1)[1].strip()
+                line = fp.readline().lower()
+
+            else:
+                config_content[line.split(" ", 1)[0].strip()] = line.split(" ", 1)[1].strip()
+                line = fp.readline().lower()
+
+            if line:
+                validate_config_lines(line, k)
+
+    validate_config_content('same', config_content)
+    validate_config_content('diff', config_content)
+    validate_config_content('gap', config_content)
+    validate_config_content('max_seq_length', config_content)
+    validate_config_content('max_number_paths', config_content)
+
+    config_content = {k: config_content[k] for k in ['same', 'diff', 'gap', 'max_seq_length', 'max_number_paths']}
 
     return config_content
 
